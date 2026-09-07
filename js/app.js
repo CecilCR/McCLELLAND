@@ -9,13 +9,15 @@ import {
 
 // Configuración del proyecto "mcclelland-e8520"
 const firebaseConfig = {
-  apiKey: "AIzaSyAmtAdViOTHrONnQAz9DPl70a7c1Nvu-s8",
+  const firebaseConfig = {
+  apiKey: "AIzaSyC8r56b9Db_JlwX-YAiJTBXEOJaCW9ehrQ",
   authDomain: "mcclelland-e8520.firebaseapp.com",
   projectId: "mcclelland-e8520",
   storageBucket: "mcclelland-e8520.firebasestorage.app",
   messagingSenderId: "632722832584",
   appId: "1:632722832584:web:978680671ba96dbd1839fd"
 };
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
