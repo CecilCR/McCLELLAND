@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil Motivacional · McClelland</title>
+<style>
+  :root {
+    --tinta: #2b2620;
+    --papel: #faf7f2;
+    --linea: #dcd5c8;
+    --poder: #a1442e;
+    --afiliacion: #3d6b52;
+    --logro: #3a5a8c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--papel);
+    color: var(--tinta);
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+    line-height: 1.5;
+  }
+  header { margin-bottom: 32px; border-bottom: 2px solid var(--tinta); padding-bottom: 12px; }
+  header h1 { font-size: 1.5rem; margin: 0; }
+  header p { margin: 4px 0 0; color: #6b6357; font-size: 0.95rem; }
+
+  .oculto { display: none !important; }
+
+  label { display: block; margin: 14px 0 4px; font-size: 0.9rem; }
+  input {
+    width: 100%; padding: 10px; font-size: 1rem;
+    border: 1px solid var(--linea); border-radius: 3px;
+    font-family: inherit; background: white;
+  }
+  .btn {
+    display: inline-block; margin-top: 18px; padding: 11px 22px;
+    background: var(--tinta); color: var(--papel); border: none;
+    border-radius: 3px; font-size: 1rem; cursor: pointer; font-family: inherit;
+  }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-secundario { background: transparent; color: var(--tinta); border: 1px solid var(--tinta); }
+  .enlace { background: none; border: none; color: var(--poder); text-decoration: underline; cursor: pointer; font-size: 0.9rem; padding: 0; font-family: inherit; }
+
+  .mensaje { margin-top: 10px; font-size: 0.9rem; padding: 8px 10px; border-radius: 3px; }
+  .mensaje.error { background: #f6e3df; color: var(--poder); }
+  .mensaje.exito { background: #e2ede7; color: var(--afiliacion); }
+
+  .barra-progreso { height: 6px; background: var(--linea); border-radius: 3px; margin-bottom: 24px; overflow: hidden; }
+  .barra-progreso-relleno { height: 100%; background: var(--tinta); width: 0%; transition: width 0.3s; }
+
+  .pregunta-contexto { color: #6b6357; font-size: 0.9rem; margin-bottom: 4px; }
+  .pregunta-titulo { font-size: 1.25rem; margin: 0 0 20px; }
+
+  .opcion {
+    display: block; width: 100%; text-align: left; padding: 14px 16px;
+    margin-bottom: 10px; border: 1px solid var(--linea); border-radius: 4px;
+    background: white; cursor: pointer; font-family: inherit; font-size: 1rem; color: var(--tinta);
+  }
+  .opcion:hover:not(:disabled) { border-color: var(--tinta); }
+  .opcion.seleccionada { border-color: var(--tinta); border-width: 2px; background: #f1ede4; }
+  .opcion:disabled { cursor: default; }
+
+  .retroalimentacion { margin: 4px 0 20px; padding: 12px 14px; background: #f1ede4; border-left: 3px solid var(--tinta); font-size: 0.95rem; }
+
+  .usuario-barra { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 0.9rem; color: #6b6357; }
+
+  .resultado-titulo { text-align: center; font-size: 1.1rem; color: #6b6357; margin-bottom: 24px; }
+  .perfil-fila { margin-bottom: 16px; }
+  .perfil-fila-etiqueta { display: flex; justify-content: space-between; font-size: 0.95rem; margin-bottom: 4px; }
+  .perfil-barra-fondo { height: 14px; background: var(--linea); border-radius: 7px; overflow: hidden; }
+  .perfil-barra-relleno { height: 100%; border-radius: 7px; transition: width 0.4s; }
+  .perfil-barra-relleno.poder { background: var(--poder); }
+  .perfil-barra-relleno.afiliacion { background: var(--afiliacion); }
+  .perfil-barra-relleno.logro { background: var(--logro); }
+
+  .perfil-dominante { text-align: center; font-size: 1.3rem; margin: 28px 0; padding: 18px; border: 1px solid var(--linea); border-radius: 6px; }
+
+  .resumen-item { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--linea); font-size: 0.9rem; }
+  .resumen-item:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Perfil Motivacional</h1>
+  <p>Simulador basado en la teoría de necesidades de McClelland</p>
+</header>
+
+<!-- LOGIN -->
+<section id="seccion-login">
+  <label for="login-email">Correo</label>
+  <input type="email" id="login-email">
+  <label for="login-password">Contraseña</label>
+  <input type="password" id="login-password">
+  <div>
+    <button class="btn" id="btn-login">Iniciar sesión</button>
+  </div>
+  <p><button class="enlace" onclick="window.mostrarRegistro()">¿No tienes cuenta? Regístrate</button></p>
+  <div id="login-mensaje"></div>
+</section>
+
+<!-- REGISTRO -->
+<section id="seccion-registro" class="oculto">
+  <label for="registro-nombre">Nombre</label>
+  <input type="text" id="registro-nombre">
+  <label for="registro-email">Correo</label>
+  <input type="email" id="registro-email">
+  <label for="registro-password">Contraseña</label>
+  <input type="password" id="registro-password">
+  <div>
+    <button class="btn" id="btn-registro">Crear cuenta</button>
+  </div>
+  <p><button class="enlace" onclick="window.mostrarLogin()">¿Ya tienes cuenta? Inicia sesión</button></p>
+  <div id="registro-mensaje"></div>
+</section>
+
+<!-- APP (autenticado) -->
+<section id="seccion-app" class="oculto">
+  <div class="usuario-barra">
+    <span>Hola, <strong id="usuario-nombre">—</strong></span>
+    <button class="enlace" onclick="window.cerrarSesion()">Cerrar sesión</button>
+  </div>
+
+  <!-- SIMULADOR -->
+  <div id="simulador">
+    <div class="barra-progreso"><div class="barra-progreso-relleno" id="barra-progreso"></div></div>
+    <p class="pregunta-contexto" id="pregunta-contexto">Cargando...</p>
+    <h2 class="pregunta-titulo" id="pregunta-titulo">Cargando preguntas...</h2>
+    <div id="opciones-container"></div>
+    <div id="retroalimentacion" class="retroalimentacion oculto"></div>
+    <button class="btn" id="btn-siguiente" disabled>Siguiente</button>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div id="resultados" class="oculto">
+    <p class="resultado-titulo">Resultados del simulador</p>
+
+    <div class="perfil-fila">
+      <div class="perfil-fila-etiqueta"><span>Poder</span><span id="porcentaje-poder">0%</span></div>
+      <div class="perfil-barra-fondo"><div class="perfil-barra-relleno poder" id="barra-poder"></div></div>
+    </div>
+    <div class="perfil-fila">
+      <div class="perfil-fila-etiqueta"><span>Afiliación</span><span id="porcentaje-afiliacion">0%</span></div>
+      <div class="perfil-barra-fondo"><div class="perfil-barra-relleno afiliacion" id="barra-afiliacion"></div></div>
+    </div>
+    <div class="perfil-fila">
+      <div class="perfil-fila-etiqueta"><span>Logro</span><span id="porcentaje-logro">0%</span></div>
+      <div class="perfil-barra-fondo"><div class="perfil-barra-relleno logro" id="barra-logro"></div></div>
+    </div>
+
+    <div class="perfil-dominante" id="perfil-dominante">—</div>
+
+    <div id="resumen-respuestas"></div>
+
+    <button class="btn" onclick="window.reiniciarSimulador()">Repetir simulador</button>
+    <button class="btn btn-secundario" onclick="window.cerrarSesion()">Cerrar sesión</button>
+  </div>
+</section>
+
+<script type="importmap">
+{
+  "imports": {
+    "firebase/app": "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js"
+  }
+}
+</script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
