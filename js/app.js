@@ -9,7 +9,6 @@ import {
 
 // Configuración del proyecto "mcclelland-e8520"
 const firebaseConfig = {
-  const firebaseConfig = {
   apiKey: "AIzaSyC8r56b9Db_JlwX-YAiJTBXEOJaCW9ehrQ",
   authDomain: "mcclelland-e8520.firebaseapp.com",
   projectId: "mcclelland-e8520",
