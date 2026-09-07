@@ -31,6 +31,14 @@ let perfilesTotal = { poder: 0, afiliacion: 0, logro: 0 };
 const PERFILES_VALIDOS = ["poder", "afiliacion", "logro"];
 const ETIQUETAS_PERFIL = { poder: "Poder", afiliacion: "Afiliación", logro: "Logro" };
 
+// Normaliza un texto quitando tildes y pasando a minúsculas, para que
+// "afiliación", "Afiliación" y "afiliacion" se traten como el mismo valor
+// sin importar cómo se haya escrito el dato en Firestore.
+function normalizarPerfil(valor) {
+    if (typeof valor !== 'string') return valor;
+    return valor.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
 // ---------------------------------------------------------------
 // AUTENTICACIÓN
 // ---------------------------------------------------------------
@@ -238,12 +246,13 @@ window.seleccionarOpcion = function (index) {
     const pregunta = preguntas[preguntaActual];
     const opcion = pregunta.opciones[index];
 
-    // Validación defensiva: perfil debe ser uno de los tres válidos,
-    // peso debe ser numérico. Si no, se avisa en consola y no se suma nada.
-    const perfil = opcion.perfil;
+    // Validación defensiva: perfil debe ser uno de los tres válidos
+    // (ignorando tildes/mayúsculas), peso debe ser numérico. Si no,
+    // se avisa en consola y no se suma nada.
+    const perfil = normalizarPerfil(opcion.perfil);
     let peso = Number(opcion.peso);
     if (!PERFILES_VALIDOS.includes(perfil)) {
-        console.warn(`⚠️ La opción ${index} de la pregunta "${pregunta['título']}" (id: ${pregunta.id}) tiene un "perfil" inválido:`, perfil);
+        console.warn(`⚠️ La opción ${index} de la pregunta "${pregunta['título']}" (id: ${pregunta.id}) tiene un "perfil" inválido:`, opcion.perfil);
         peso = 0;
     } else if (isNaN(peso)) {
         console.warn(`⚠️ La opción ${index} de la pregunta "${pregunta['título']}" (id: ${pregunta.id}) no tiene un "peso" numérico. Valor recibido:`, opcion.peso);
